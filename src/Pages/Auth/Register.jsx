@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 const Register = () => {
+
+  const {createUser, setUser, googleSignIn} = useContext(AuthContext)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -11,14 +16,31 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data)
+
+    createUser(data.email, data.password)
+    .then((result) =>{
+      const user = result.user
+      console.log(user)
+      setUser(user)
+      navigate("/dashboard")
+    })
+  };
 
   //   console.log(watch("example")) // watch input value by passing the name of it
 
 
   const handleGoogleLogin = () =>{
-
+    googleSignIn()
+    .then((result)=>{
+      const user = result.user 
+      setUser(user)
+      console.log(user)
+    })
   }
+
+
   return (
     <div className="mx-auto w-8/12 border  shadow-md">
       {/* /* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
@@ -39,7 +61,8 @@ const Register = () => {
             className="input input-bordered w-full"
             placeholder="Enter Your Name"
           />
-          {errors.name && <span>Name is required</span>}
+          {errors.name && <span className="text-red-600">Name is required</span>}
+
 
           {/* email field  */}
           <label htmlFor="" className="label">
@@ -52,7 +75,7 @@ const Register = () => {
              placeholder="Enter Your Email"
           />
           {/* errors will return when field validation fails  */}
-          {errors.email && <span>Email is required</span>}
+          {errors.email && <span className="text-red-600">Email is required</span>}
 
           {/* password field  */}
           <label htmlFor="" className="label">
@@ -65,7 +88,7 @@ const Register = () => {
             placeholder="Enter Password"
           />
           {/* errors will return when field validation fails  */}
-          {errors.password && <span>Password is required</span>}
+          {errors.password && <span className="text-red-600">Password is required</span>}
 
           <input type="submit" value="Sign Up" className="bg-pink-500 h-10 text-white" />
 

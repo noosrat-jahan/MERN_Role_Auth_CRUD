@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router';
+import { AuthContext } from '../../Provider/AuthProvider';
 
 const Login = () => {
+
+    const {googleSignIn, setUser} = useContext(AuthContext)
 
     const handleLogin = e =>{
         e.preventDefault()
@@ -13,8 +16,13 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () =>{
-
-    }
+        googleSignIn()
+        .then((result)=>{
+          const user = result.user 
+          setUser(user)
+          console.log(user)
+        })
+      }
     return (
         <div className="hero-content  w-10/12 mx-auto shadow m-3">
             <div className="card  w-full lg:max-w-md shrink-0 shadow-md">
