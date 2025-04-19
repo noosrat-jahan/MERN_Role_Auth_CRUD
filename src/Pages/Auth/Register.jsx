@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Provider/AuthProvider";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Register = () => {
-
-  const {createUser, setUser, googleSignIn} = useContext(AuthContext)
-  const navigate = useNavigate()
+  const { createUser, setUser, googleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -17,29 +18,50 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data)
+    console.log(data);
 
-    createUser(data.email, data.password)
-    .then((result) =>{
-      const user = result.user
-      console.log(user)
-      setUser(user)
-      navigate("/dashboard")
-    })
+    createUser(data.email, data.password).then((result) => {
+      const user = result.user;
+      console.log(user);
+      setUser(user);
+      navigate("/dashboard");
+
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+      };
+
+      axios
+        .post("http://localhost:5000/users", userInfo)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Signed Up Successfully",
+              showConfirmButton: false,
+              timer: 3500,
+            });
+            // navigate(from, { replace: true });
+          }
+        })
+
+        .catch((err) => {
+          console.log("Registration Error:", err.message);
+        });
+    });
   };
 
   //   console.log(watch("example")) // watch input value by passing the name of it
 
-
-  const handleGoogleLogin = () =>{
-    googleSignIn()
-    .then((result)=>{
-      const user = result.user 
-      setUser(user)
-      console.log(user)
-    })
-  }
-
+  const handleGoogleLogin = () => {
+    googleSignIn().then((result) => {
+      const user = result.user;
+      setUser(user);
+      console.log(user);
+    });
+  };
 
   return (
     <div className="mx-auto w-8/12 border  shadow-md">
@@ -61,8 +83,9 @@ const Register = () => {
             className="input input-bordered w-full"
             placeholder="Enter Your Name"
           />
-          {errors.name && <span className="text-red-600">Name is required</span>}
-
+          {errors.name && (
+            <span className="text-red-600">Name is required</span>
+          )}
 
           {/* email field  */}
           <label htmlFor="" className="label">
@@ -72,10 +95,12 @@ const Register = () => {
             type="email"
             {...register("email", { required: true })}
             className="input input-bordered w-full"
-             placeholder="Enter Your Email"
+            placeholder="Enter Your Email"
           />
           {/* errors will return when field validation fails  */}
-          {errors.email && <span className="text-red-600">Email is required</span>}
+          {errors.email && (
+            <span className="text-red-600">Email is required</span>
+          )}
 
           {/* password field  */}
           <label htmlFor="" className="label">
@@ -88,9 +113,15 @@ const Register = () => {
             placeholder="Enter Password"
           />
           {/* errors will return when field validation fails  */}
-          {errors.password && <span className="text-red-600">Password is required</span>}
+          {errors.password && (
+            <span className="text-red-600">Password is required</span>
+          )}
 
-          <input type="submit" value="Sign Up" className="bg-pink-500 h-10 text-white" />
+          <input
+            type="submit"
+            value="Sign Up"
+            className="bg-pink-500 h-10 text-white"
+          />
 
           <h3 className="text-[#d269cc]">
             Already have an account?{" "}
