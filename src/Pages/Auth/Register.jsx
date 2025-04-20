@@ -24,11 +24,12 @@ const Register = () => {
       const user = result.user;
       console.log(user);
       setUser(user);
-      navigate("/dashboard");
+      navigate("/dashboard/all_users");
 
       const userInfo = {
         name: data.name,
         email: data.email,
+        role: "Admin",
       };
 
       axios
@@ -60,13 +61,42 @@ const Register = () => {
       const user = result.user;
       setUser(user);
       console.log(user);
+
+      navigate("/dashboard");
+
+      const userInfo = {
+        name: user.displayName,
+        email: user.email,
+        role: "Staff",
+      };
+
+      axios
+        .post("http://localhost:5000/users", userInfo)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Signed Up Successfully",
+              showConfirmButton: false,
+              timer: 3500,
+            });
+            // navigate(from, { replace: true });
+          }
+        })
+
+        .catch((err) => {
+          console.log("Registration Error:", err.message);
+        });
     });
   };
 
   return (
-    <div className="mx-auto w-8/12 border  shadow-md">
+    <div className=" mt-5 mx-auto w-8/12 border  shadow-md">
+      <Link to="/" className='btn btn-info mt-2 text-white font-semibold text-lg'>⬅️ Back To Home</Link>
       {/* /* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
-      <div className="card mx-auto w-full lg:max-w-md shrink-0 ">
+      <div className="card mx-auto w-full lg:max-w-sm shrink-0 ">
         <h1 className="font-bold text-2xl">Register</h1>
         <form
           onSubmit={handleSubmit(onSubmit)}

@@ -7,6 +7,9 @@ import Dashboard from "../Pages/Dashboard";
 import Errorpage from "../Pages/Errorpage";
 import AllUsers from "../Pages/AllUsers";
 import MyProfile from "../Pages/MyProfile";
+import Register_user from "../Pages/Register_user";
+import DashboardHome from "../Pages/DashboardHome";
+import EditUser from "../Pages/EditUser";
 
 const Routes = createBrowserRouter([
   {
@@ -18,8 +21,20 @@ const Routes = createBrowserRouter([
     element: <Dashboard></Dashboard>,
     children: [
       {
+        path: "",
+        element: <DashboardHome></DashboardHome>,
+      },
+      {
         path: "all_users",
         element: <AllUsers></AllUsers>,
+      },
+      {
+        path: "register_user",
+        element: <Register_user></Register_user>,
+      },
+      {
+        path: "all_users/:id",
+        element: <EditUser></EditUser>,
       },
       {
         path: "profile",

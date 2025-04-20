@@ -1,13 +1,32 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 import profile from "../assets/user.png";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logOutUser } = useContext(AuthContext);
+
+  const navigate = useNavigate()
+ 
   {
     /* <h1>{user.email}</h1> */
   }
+
+  const handleLogout = () =>{
+    logOutUser().then(() => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Sign Out Successfully",
+        showConfirmButton: false,
+        timer: 3500,
+      });
+      navigate("/login");
+    });
+  }
+
+
   return (
     <div className="h-auto bg-cyan-300 w-full flex justify-end p-4">
       {user ? (
@@ -32,14 +51,16 @@ const Navbar = () => {
             <li>
               <a className="justify-between">
                 Role
-                <span className="badge">New</span>
+                <span className="badge">new</span>
               </a>
             </li>
             <li>
               <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link to="/dashboard">Logout</Link>
+              <Link onClick={handleLogout} to="/login">
+                <button>LogOut</button>
+              </Link>
             </li>
           </ul>
         </div>

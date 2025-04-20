@@ -24,8 +24,10 @@ const Login = () => {
         })
       }
     return (
-        <div className="hero-content  w-10/12 mx-auto shadow m-3">
-            <div className="card  w-full lg:max-w-md shrink-0 shadow-md">
+        <div className="hero-content  w-11/12 mx-auto shadow m-3">
+              <Link to="/" className='btn btn-info mt-2 text-white font-semibold text-lg'>⬅️ Back To Home</Link>  
+            <div className="card  w-full lg:max-w-sm shrink-0 shadow-md">
+                         
                 <form onSubmit={handleLogin} className="card-body text-black p-0 md:p-4">
                     <h1 className='text-3xl text-black font-semibold'>Login</h1>
 

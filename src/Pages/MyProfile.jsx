@@ -3,7 +3,7 @@ import React from 'react';
 const MyProfile = () => {
     return (
         <div>
-            profile
+            <h1>Welcome to your Profile</h1>
         </div>
     );
 };
