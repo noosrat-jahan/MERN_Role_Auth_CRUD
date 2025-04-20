@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { auth } from '../Firebase/Firebase.config';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 
 
 export const AuthContext = createContext()
 
 import { GoogleAuthProvider } from "firebase/auth";
+import axios from 'axios';
 
 const provider = new GoogleAuthProvider();
 
@@ -16,6 +17,10 @@ const AuthProvider = ({children}) => {
 
     const createUser = (email, password)=>{
         return createUserWithEmailAndPassword(auth, email, password)
+    }
+
+    const signInUser = (email, password)=>{
+        return signInWithEmailAndPassword(auth, email, password)
     }
 
     const googleSignIn = () =>{
@@ -30,6 +35,7 @@ const AuthProvider = ({children}) => {
         user,
         setUser,
         createUser,
+        signInUser,
         googleSignIn,
         logOutUser
     }
@@ -38,6 +44,22 @@ const AuthProvider = ({children}) => {
         const unSubscribe = onAuthStateChanged(auth, currentUser=>{
             setUser(currentUser)
             console.log('CurrentUser', currentUser)
+            if(currentUser){
+                const userInfo = {email : currentUser.email }
+
+                axios.post("https://mern-role-auth-crud-server.vercel.app/jwt", userInfo)
+                .then((res) =>{
+                    if(res.data.token){
+                        console.log('Token:', res.data.token)
+                        // store access token in the local storage
+                        localStorage.setItem("Access-Token", res.data.token)
+                    }
+                })
+            }
+            else{
+                // remove token from local storage
+                localStorage.removeItem("Access-Token")
+            }
 
         })
 

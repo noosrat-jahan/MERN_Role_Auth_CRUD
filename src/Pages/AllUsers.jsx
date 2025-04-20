@@ -1,16 +1,28 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const AllUsers = () => {
   const [alluser, setAllUsers] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/users").then((res) => {
+    axios.get("https://mern-role-auth-crud-server.vercel.app/users").then((res) => {
       console.log(res.data);
       setAllUsers(res.data);
     });
   }, []);
+
+
+   const { user } = useContext(AuthContext);
+    const [role, setRole] = useState(null);
+  
+    useEffect(() => {
+      axios.get(`https://mern-role-auth-crud-server.vercel.app/users/${user?.email}`).then((res) => {
+        console.log("User: ", res.data);
+        setRole(res.data.role);
+      });
+    }, []);
 
   return (
     <div className=" mx-auto ">
@@ -25,7 +37,7 @@ const AllUsers = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
-              <th>Action</th>
+              <th className={role=="Admin" || role == "Super Admin" ? "block": "hidden"}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -37,7 +49,7 @@ const AllUsers = () => {
                 <td>{alluser.name}</td>
                 <td>{alluser.email}</td>
                 <td>{alluser.role}</td>
-                <td className="text-purple-600 font-bold"><Link to={`/dashboard/all_users/${alluser._id}`}>Edit User</Link></td>
+                <td className={role=="Admin" || role == "Super Admin" ? "block": "hidden" }><Link className="text-purple-600 font-bold" to={`/dashboard/all_users/${alluser._id}`}>Edit User</Link></td>
               </tr>
             ))}
           </tbody>

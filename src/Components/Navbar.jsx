@@ -1,17 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 import profile from "../assets/user.png";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const Navbar = () => {
   const { user, logOutUser } = useContext(AuthContext);
+  const [role, setRole] = useState(null)
 
   const navigate = useNavigate()
  
   {
     /* <h1>{user.email}</h1> */
   }
+
+  useEffect(()=>{
+    axios.get(`https://mern-role-auth-crud-server.vercel.app/users/${user?.email}`)
+    .then((res)=>{
+      console.log("User: ",res.data)
+      setRole(res.data.role)
+    })
+  },[])
 
   const handleLogout = () =>{
     logOutUser().then(() => {
@@ -51,7 +61,7 @@ const Navbar = () => {
             <li>
               <a className="justify-between">
                 Role
-                <span className="badge">new</span>
+                <span className="badge">{role}</span>
               </a>
             </li>
             <li>

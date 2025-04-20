@@ -20,7 +20,8 @@ const Register = () => {
   const onSubmit = (data) => {
     console.log(data);
 
-    createUser(data.email, data.password).then((result) => {
+    createUser(data.email, data.password)
+    .then((result) => {
       const user = result.user;
       console.log(user);
       setUser(user);
@@ -33,7 +34,7 @@ const Register = () => {
       };
 
       axios
-        .post("http://localhost:5000/users", userInfo)
+        .post("https://mern-role-auth-crud-server.vercel.app/users", userInfo)
         .then((res) => {
           console.log(res.data);
           if (res.data.insertedId) {
@@ -67,11 +68,11 @@ const Register = () => {
       const userInfo = {
         name: user.displayName,
         email: user.email,
-        role: "Staff",
+        role: "Admin",
       };
 
       axios
-        .post("http://localhost:5000/users", userInfo)
+        .post("https://mern-role-auth-crud-server.vercel.app/users", userInfo)
         .then((res) => {
           console.log(res.data);
           if (res.data.insertedId) {

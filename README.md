@@ -1,16 +1,17 @@
 # Project Name: MERN_ROLE_AUTH_CRUD
 
 
-
 # Project Overview
 
+This website is MERN role based authencicated application with CRUD implementation. In this application admin can create or register user, can view and edit user data. This website contain very simple and minimalistic UI and functionality based on five different user role. User except admin will login the website using credentials provided by the admin that were used during registration.
 
 
 # Key Features
 
-* Easylearn website users have three different roles: general user, admin and teacher.
-
-
+* user having any of the provided role can login the website
+* Admin can login, view all user, register user and edit user info.
+* Login with jwt token generation with 2 minutes of token expiration and when logout user, token will be removed from local storage.
+* Role based dashboard access.
 
 
 # Technologies: 
@@ -80,8 +81,8 @@ Run `npm run dev` to run the project locally.
 
 # Admin Credentials
 
-Email: giziho@mailinator.com
-Password: abcdef
+Email: noosrat@gmail.com
+Password: noo6789srat
 
 # Links: 
 
